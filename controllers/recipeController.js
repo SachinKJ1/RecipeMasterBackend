@@ -43,6 +43,7 @@ exports.getOneRecipe = catchAsync(async (req, res, next) => {
 exports.createRecipe = catchAsync(async (req, res, next) => {
   req.body.createdBy = req.user.id;
   req.body.servings = 4;
+  req.body.createdAt = new Date(Date.now());
 
   const recipe = await Recipe.create(req.body);
 
@@ -72,7 +73,7 @@ exports.deleteRecipe = catchAsync(async (req, res, next) => {
   if (!recipe) {
     return next(new AppError("No Recipe found", 404));
   }
-  this.getUserRecipes(req,res,next);
+  this.getUserRecipes(req, res, next);
 });
 
 exports.getUserRecipes = catchAsync(async (req, res, next) => {

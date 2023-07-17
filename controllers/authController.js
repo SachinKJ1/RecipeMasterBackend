@@ -140,7 +140,7 @@ exports.getCurrentUser = catchAsync(async (req, res, next) => {
       path: "bookmarks",
       select: "-user -__v",
     })
-    .select("-role -__v");
+    .select("-__v");
 
   if (!user) {
     return next(new AppError("User not Found", 401));

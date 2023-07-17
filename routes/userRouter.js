@@ -3,7 +3,12 @@ const authController = require("../controllers/authController");
 const userController = require("../controllers/userController");
 const router = express.Router();
 
-router.get("/", userController.getAllUsers);
+router.get(
+  "/",
+  authController.protect,
+  authController.restrictTo("admin"),
+  userController.getAllUsers
+);
 
 router.post("/signUp", authController.signUp);
 router.post("/login", authController.login);
@@ -27,6 +32,14 @@ router.get(
 );
 
 router.delete("/deleteMe", authController.protect, authController.deleteMe);
+
+// admin routes
+router.delete(
+  "/deleteUser/:id",
+  authController.protect,
+  authController.restrictTo("admin"),
+  userController.deleteUser
+);
 
 // router.post("/checkEmail", authController.checkEmail);
 router.route("/checkEmail").post(authController.checkEmail);

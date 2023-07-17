@@ -47,12 +47,14 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   if (!users) {
     next(new AppError("Something went wrong", 404));
   }
-
+  // admins are not passed
+  const onlyUsers = users.filter((user) => user.role !== "admin");
+  // console.log(onlyUsers);
   res.status(200).json({
     status: "success",
-    results: users.length,
+    results: onlyUsers.length,
     data: {
-      users,
+      onlyUsers,
     },
   });
 });
@@ -99,6 +101,15 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.deleteUser = catchAsync(async (req, res, next) => {
+  await User.findByIdAndUpdate(req.params.id, { active: false });
+
+  res.status(200).json({
+    status: "success",
+    data: null,
+  });
+});
+
 // exports.uploadUserPhoto = catchAsync(async (req, res, next) => {
 //   const user = await User.findByIdAndUpdate(
 //     req.user.id,
@@ -120,3 +131,5 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 //     },
 //   });
 // });
+
+
